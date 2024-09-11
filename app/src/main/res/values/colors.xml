@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Cores primárias -->
+    <color name="colorPrimary">#4A728F</color> <!-- Cor principal -->
+    <color name="colorOnPrimary">#FFFFFF</color> <!-- Texto sobre cor primária -->
+    <color name="colorPrimaryContainer">#0A2639</color> <!-- Variante escura -->
+    <color name="colorOnPrimaryContainer">#FFFFFF</color> <!-- Texto sobre container primário -->
+
+    <!-- Cores secundárias -->
+    <color name="colorSecondary">#234963</color> <!-- Cor secundária -->
+    <color name="colorOnSecondary">#000000</color> <!-- Texto sobre cor secundária -->
+    <color name="colorSecondaryContainer">#7EA0B8</color> <!-- Variante escura da cor secundária -->
+    <color name="colorOnSecondaryContainer">#000000</color> <!-- Texto sobre container secundário -->
+
+    <!-- Cores de fundo e superfícies -->
+    <color name="colorBackground">#BCC2C6</color> <!-- Fundo -->
+    <color name="colorOnBackground">#000000</color> <!-- Texto sobre fundo -->
+    <color name="colorSurface">#D9DFE4</color> <!-- Superfícies (cards, dialogs) -->
+    <color name="colorOnSurface">#000000</color> <!-- Texto sobre superfícies -->
+
+    <!-- Cor de erro -->
+    <color name="colorError">#B00020</color>
+    <color name="colorOnError">#FFFFFF</color>
+
+</resources>

@@ -1,0 +1,23 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.CurrencyExchangeApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Ajuste das cores para o modo escuro -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#003049</item> <!-- Escurecido para contraste -->
+        <item name="colorOnPrimaryContainer">#FFFFFF</item>
+
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">#FFFFFF</item> <!-- Texto claro sobre cor secundária -->
+        <item name="colorSecondaryContainer">#003A6D</item> <!-- Escurecido para contraste -->
+        <item name="colorOnSecondaryContainer">#FFFFFF</item>
+
+
+        <item name="colorOnBackground">#E0E0E0</item> <!-- Texto claro sobre fundo escuro -->
+        <item name="colorSurface">#1F1F1F</item> <!-- Cor escura para superfícies -->
+        <item name="colorOnSurface">#E0E0E0</item> <!-- Texto claro sobre superfícies escuras -->
+
+        <item name="colorError">@color/colorError</item>
+        <item name="colorOnError">#FFFFFF</item>
+    </style>
+</resources>
