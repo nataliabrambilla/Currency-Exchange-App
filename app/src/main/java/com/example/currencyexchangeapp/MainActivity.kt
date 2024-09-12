@@ -28,6 +28,27 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, CurrencyListActivity::class.java))
         }
 
+        setupNumericButtons()
+        setupClearButton()
+
+        //Inverter moedas
+        binding.btnSwap.setOnClickListener {
+            //3. Inverter as moedas
+
+        }
+
+    }
+
+    private fun setupClearButton() {
+
+        //Limpar ao clicar no buttonClear
+        binding.buttonClear.setOnClickListener {
+            binding.textValue1.text = "0"
+        }
+    }
+
+    private fun setupNumericButtons() {
+
         //Listener para botões numéricos e .
         val buttons = listOf(
             binding.button0,
@@ -48,24 +69,18 @@ class MainActivity : AppCompatActivity() {
 
             button.setOnClickListener {
 
+                //Capturar o valor atual do textValue1
                 val currentText = binding.textValue1.text.toString()
-                val newText = currentText + button.text.toString()
+                //Capturar o valor selecionado do botão clicado
+                val buttonText = button.text.toString()
 
-                binding.textValue1.setText(newText)
+                if (currentText == "0" && buttonText != ".") {
+                    binding.textValue1.text = buttonText
+                } else {
+                    val newText = currentText + buttonText
+                    binding.textValue1.text = newText
+                }
             }
         }
-
-        //Limpar ao clicar no buttonClear
-        binding.buttonClear.setOnClickListener {
-            binding.textValue1.setText("")
-        }
-
-        //Inverter moedas
-        binding.btnSwap.setOnClickListener {
-            //3. Inverter as moedas
-
-        }
-
     }
-
 }
