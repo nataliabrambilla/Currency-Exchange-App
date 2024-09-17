@@ -5,7 +5,7 @@ O Currency Exchange App é um aplicativo Android que permite a conversão de moe
 ## Funcionalidades
 
 - Conversão entre várias moedas
-- Interface de usuário moderna e intuitiva
+- Interface de usuário intuitiva
 - Atualização automática das taxas de câmbio
 
 ## Tecnologias utilizadas

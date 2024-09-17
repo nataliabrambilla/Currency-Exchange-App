@@ -18,16 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        //Abrir a CurrencyListActivity
-        binding.clCurrency1.setOnClickListener {
-            startActivity(Intent(this, CurrencyListActivity::class.java))
-        }
-
-        //Abrir a CurrencyListActivity
-        binding.clCurrency2.setOnClickListener {
-            startActivity(Intent(this, CurrencyListActivity::class.java))
-        }
-
+        openCurrencyListActivity()
         setupNumericButtons()
         setupClearButton()
 
@@ -36,20 +27,24 @@ class MainActivity : AppCompatActivity() {
             //3. Inverter as moedas
 
         }
-
     }
 
-    private fun setupClearButton() {
+    private fun openCurrencyListActivity() {
 
-        //Limpar ao clicar no buttonClear
-        binding.buttonClear.setOnClickListener {
-            binding.textValue1.text = "0"
+        //A partir de clCurrency1
+        binding.clCurrency1.setOnClickListener {
+            startActivity(Intent(this, CurrencyListActivity::class.java))
+        }
+
+        //A partir de clCurrency2
+        binding.clCurrency2.setOnClickListener {
+            startActivity(Intent(this, CurrencyListActivity::class.java))
         }
     }
 
     private fun setupNumericButtons() {
 
-        //Listener para botões numéricos e .
+        //Listener para botões numéricos e "."
         val buttons = listOf(
             binding.button0,
             binding.button1,
@@ -81,6 +76,14 @@ class MainActivity : AppCompatActivity() {
                     binding.textValue1.text = newText
                 }
             }
+        }
+    }
+
+    private fun setupClearButton() {
+
+        //Limpar ao clicar no buttonClear
+        binding.buttonClear.setOnClickListener {
+            binding.textValue1.text = "0"
         }
     }
 

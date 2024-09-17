@@ -22,7 +22,7 @@
         android:layout_marginStart="16dp"/>
 
     <TextView
-        android:id="@+id/textCodCurrency"
+        android:id="@+id/textCodeCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="xxx"
