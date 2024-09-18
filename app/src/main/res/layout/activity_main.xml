@@ -17,14 +17,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/btnCurrency1"
+            android:id="@+id/imageCurrency1"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="24dp"
             app:layout_constraintBottom_toTopOf="@id/textCurrency1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            android:src="@drawable/ic_man"/>
 
         <TextView
             android:id="@+id/textCurrency1"
@@ -32,9 +33,9 @@
             android:layout_height="wrap_content"
             android:text="XXX"
             app:layout_constraintBottom_toBottomOf="@id/clCurrency1"
-            app:layout_constraintEnd_toEndOf="@id/btnCurrency1"
-            app:layout_constraintStart_toStartOf="@id/btnCurrency1"
-            app:layout_constraintTop_toBottomOf="@id/btnCurrency1" />
+            app:layout_constraintEnd_toEndOf="@id/imageCurrency1"
+            app:layout_constraintStart_toStartOf="@id/imageCurrency1"
+            app:layout_constraintTop_toBottomOf="@id/imageCurrency1" />
 
         <TextView
             android:id="@+id/textValue1"
@@ -45,11 +46,60 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:textSize="32sp"
             app:layout_constraintTop_toTopOf="@id/clCurrency1"
-            app:layout_constraintStart_toEndOf="@id/btnCurrency1"
+            app:layout_constraintStart_toEndOf="@id/imageCurrency1"
             app:layout_constraintHorizontal_bias="1"
             android:background="@null"
             android:maxLength="15"
             android:text="0"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clCurrency2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/gridLayoutNumbers"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clCurrency1">
+
+        <ImageButton
+            android:id="@+id/imageCurrency2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintBottom_toTopOf="@id/textCurrency2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/clCurrency2"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:src="@drawable/ic_woman"/>
+
+        <TextView
+            android:id="@+id/textCurrency2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XXX"
+            app:layout_constraintBottom_toBottomOf="@id/clCurrency2"
+            app:layout_constraintEnd_toEndOf="@id/imageCurrency2"
+            app:layout_constraintStart_toStartOf="@id/imageCurrency2"
+            app:layout_constraintTop_toBottomOf="@id/imageCurrency2" />
+
+        <TextView
+            android:id="@+id/textValue2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="24dp"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="@id/clCurrency2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/clCurrency2"
+            android:text="0"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/imageCurrency2"
+            android:background="@null"
+            android:maxLength="15"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -65,9 +115,9 @@
 
     <ImageButton
         android:id="@+id/btnSwap"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
         android:background="@null"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_swap_vertical_circle"
@@ -86,52 +136,6 @@
         app:layout_constraintTop_toTopOf="@id/btnSwap"
         app:layout_constraintBottom_toBottomOf="@id/btnSwap"
         />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clCurrency2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/gridLayoutNumbers"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/clCurrency1">
-
-        <ImageButton
-            android:id="@+id/btnCurrency2"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="24dp"
-            app:layout_constraintBottom_toTopOf="@id/textCurrency2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/clCurrency2"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/textCurrency2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="XXX"
-            app:layout_constraintBottom_toBottomOf="@id/clCurrency2"
-            app:layout_constraintEnd_toEndOf="@id/btnCurrency2"
-            app:layout_constraintStart_toStartOf="@id/btnCurrency2"
-            app:layout_constraintTop_toBottomOf="@id/btnCurrency2" />
-
-        <TextView
-            android:id="@+id/textValue2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="24dp"
-            android:textSize="32sp"
-            app:layout_constraintBottom_toBottomOf="@id/clCurrency2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/clCurrency2"
-            android:text="0"
-            app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintStart_toEndOf="@id/btnCurrency2"
-            android:background="@null"
-            android:maxLength="15"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <GridLayout
         android:id="@+id/gridLayoutNumbers"

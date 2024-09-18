@@ -18,15 +18,35 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        //Abrir a CurrencyListActivity
         openCurrencyListActivity()
+        //Configurar botões numéricos
         setupNumericButtons()
+        //Limpar ao clicar no buttonClear
         setupClearButton()
-
         //Inverter moedas
         binding.btnSwap.setOnClickListener {
-            //3. Inverter as moedas
-
+            swapCurrencies()
         }
+    }
+
+    private fun swapCurrencies() {
+
+        //Armazenar temporariamente os dados do clCurrency1
+        val tempCurrencyName1 = binding.textCurrency1.text.toString()
+        val tempCurrencyValue1 = binding.textValue1.text.toString()
+        val tempCurrencyFlag1 = binding.imageCurrency1.drawable //drawable?
+
+        //Trocar os dados entre os dois layouts
+        binding.textCurrency1.text = binding.textCurrency2.text
+        binding.textValue1.text = binding.textValue2.text
+        binding.imageCurrency1.setImageDrawable(binding.imageCurrency2.drawable)
+
+        //Usar os valores temporários para completar a inversão
+        binding.textCurrency2.text = tempCurrencyName1
+        binding.textValue2.text = tempCurrencyValue1
+        binding.imageCurrency2.setImageDrawable(tempCurrencyFlag1)
+
     }
 
     private fun openCurrencyListActivity() {
@@ -80,8 +100,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupClearButton() {
-
-        //Limpar ao clicar no buttonClear
         binding.buttonClear.setOnClickListener {
             binding.textValue1.text = "0"
         }
