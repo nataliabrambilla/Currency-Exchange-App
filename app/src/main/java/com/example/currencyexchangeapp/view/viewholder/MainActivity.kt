@@ -1,11 +1,14 @@
-package com.example.currencyexchangeapp
+package com.example.currencyexchangeapp.view.viewholder
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageButton
+import androidx.lifecycle.lifecycleScope
+import com.example.currencyexchangeapp.service.repository.CurrencyRepository
+import com.example.currencyexchangeapp.Result
+import com.example.currencyexchangeapp.service.model.CurrencyListModel
 import com.example.currencyexchangeapp.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,6 +20,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        val repository = CurrencyRepository()
+        lifecycleScope.launch {
+            val result: Result<CurrencyListModel> = repository.getCurrencyList()
+            when (result) {
+                is Result.Success -> {
+                    result.value.currencies
+                }
+                is Result.Error -> {
+                    result.message
+                }
+            }
+        }
 
         //Abrir a CurrencyListActivity
         openCurrencyListActivity()
@@ -104,5 +120,4 @@ class MainActivity : AppCompatActivity() {
             binding.textValue1.text = "0"
         }
     }
-
 }

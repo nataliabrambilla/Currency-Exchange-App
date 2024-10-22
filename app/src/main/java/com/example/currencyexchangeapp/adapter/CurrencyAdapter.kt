@@ -1,16 +1,15 @@
-package com.example.currencyexchangeapp
+package com.example.currencyexchangeapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView.Adapter
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyexchangeapp.databinding.ItemListBinding
+import com.example.currencyexchangeapp.service.model.Currency
 
-class CurrencyAdapter(private val currencyList: List<Currency>) :
-    Adapter<CurrencyAdapter.CurrencyViewHolder>() {
+class CurrencyAdapter(private var currencyList: List<Currency>/*, private val countryFlags: Map<String, String>*/) :
+    RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
-    inner class CurrencyViewHolder(private val binding: ItemListBinding) : ViewHolder(binding.root) {
-
+    inner class CurrencyViewHolder(private val binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root) {
 
         //Vincular os dados de um item da lista ao layout correspondente
         fun bind(currency: Currency) {
@@ -18,11 +17,12 @@ class CurrencyAdapter(private val currencyList: List<Currency>) :
         //Atribuir o valor das propriedades do objeto Currency aos TextViews
             binding.textNameCurrency.text = currency.name
             binding.textCodeCurrency.text = currency.code
-
-            /*// Carrega a imagem da bandeira usando a biblioteca Glide
-            Glide.with(binding.root.context)
-                .load(currency.flagUrl)
-                .into(binding.imageFlag)*/
+//
+//            // Carregar a bandeira usando Picasso
+//            val flagUrl = countryFlags[currency.code]
+//            if (!flagUrl.isNullOrEmpty()) {
+//                Picasso.get().load(flagUrl).into(binding.imageFlag)
+//            }
         }
     }
 
@@ -47,5 +47,11 @@ class CurrencyAdapter(private val currencyList: List<Currency>) :
     //Recuperar a quantidade de itens do RecyclerView
     override fun getItemCount(): Int {
         return currencyList.size
+    }
+
+    // Método para atualizar a lista
+    fun submitList(newList: List<Currency>) {
+        currencyList = newList
+        notifyDataSetChanged()
     }
 }
