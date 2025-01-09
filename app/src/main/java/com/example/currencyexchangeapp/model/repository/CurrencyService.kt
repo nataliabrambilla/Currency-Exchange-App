@@ -1,9 +1,9 @@
-package com.example.currencyexchangeapp.service.repository.remote
+package com.example.currencyexchangeapp.model.repository
 
-import com.example.currencyexchangeapp.service.model.CurrencyConversionResponse
-import com.example.currencyexchangeapp.service.model.CurrencyListModel
-import com.example.currencyexchangeapp.service.constants.Constants.API_KEY
-import com.example.currencyexchangeapp.service.constants.Constants.FORMAT
+import com.example.currencyexchangeapp.model.model.CurrencyConversionResponse
+import com.example.currencyexchangeapp.model.response.CurrencyListResponse
+import com.example.currencyexchangeapp.util.Constants.API_KEY
+import com.example.currencyexchangeapp.util.Constants.FORMAT
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -14,7 +14,7 @@ interface CurrencyService {
     suspend fun getCurrencyList(
         @Query("api_key") apiKey: String = API_KEY,
         @Query("format") format: String = FORMAT,
-    ): Response<CurrencyListModel>
+    ): Response<CurrencyListResponse>
 
     @GET("v2/currency/convert")
     suspend fun getCurrencyConversion(

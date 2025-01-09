@@ -1,4 +1,4 @@
-package com.example.currencyexchangeapp.service.model
+package com.example.currencyexchangeapp.model.model
 
 data class CurrencyConversionResponse(
     val status: String,

@@ -1,14 +1,9 @@
-package com.example.currencyexchangeapp.view.viewholder
+package com.example.currencyexchangeapp.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
-import com.example.currencyexchangeapp.service.repository.CurrencyRepository
-import com.example.currencyexchangeapp.Result
-import com.example.currencyexchangeapp.service.model.CurrencyListModel
 import com.example.currencyexchangeapp.databinding.ActivityMainBinding
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,18 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val repository = CurrencyRepository()
-        lifecycleScope.launch {
-            val result: Result<CurrencyListModel> = repository.getCurrencyList()
-            when (result) {
-                is Result.Success -> {
-                    result.value.currencies
-                }
-                is Result.Error -> {
-                    result.message
-                }
-            }
-        }
+        teste()
 
         //Abrir a CurrencyListActivity
         openCurrencyListActivity()

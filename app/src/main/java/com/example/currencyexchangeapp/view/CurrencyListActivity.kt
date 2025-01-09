@@ -1,15 +1,12 @@
-package com.example.currencyexchangeapp.view.viewholder
+package com.example.currencyexchangeapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.currencyexchangeapp.adapter.CurrencyAdapter
 import com.example.currencyexchangeapp.databinding.ActivityCurrencyListBinding
-import com.example.currencyexchangeapp.view.viewmodel.CurrencyListViewModel
-import com.example.currencyexchangeapp.Result
+import com.example.currencyexchangeapp.viewmodel.CurrencyListViewModel
 
 class CurrencyListActivity : AppCompatActivity() {
 
@@ -38,32 +35,27 @@ class CurrencyListActivity : AppCompatActivity() {
             finish()
         }
 
-        // Carregar a lista de moedas
+        //Carregar a lista de moedas
         currencyListViewModel.fetchCurrencyList()
     }
 
     private fun setupRecyclerView() {
-
-        // Inicializar o adapter com uma lista vazia inicialmente
-        currencyAdapter = CurrencyAdapter(emptyList()) // Inicialmente vazio
+        currencyAdapter = CurrencyAdapter(emptyList()) // Inicializar o adapter com uma lista vazia inicialmente
 
         binding.rvList.adapter = currencyAdapter
         binding.rvList.layoutManager = LinearLayoutManager(this)
-
-        /*binding.rvList.apply {
-            layoutManager = LinearLayoutManager(this@CurrencyListActivity)
-            adapter = currencyAdapter
-        }*/
     }
 
     private fun observeCurrencyList() {
         currencyListViewModel.currencyList.observe(this, Observer { result ->
 
-            if (result is Result.Success) {
-                currencyAdapter.submitList(result.value) // Atualiza o adapter com a nova lista de moedas
-            } else if (result is Result.Error) {
-                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show() // Exibe mensagem de erro
-            }
+//            if (result is Result.Success) {
+//                val sortedCurrencyList = result.value.sortedBy { it.nameCurrencyList } //Coloca a lista em ordem alfabética
+//                currencyAdapter.submitList(sortedCurrencyList) // Atualiza o adapter com a nova lista de moedas
+//
+//            } else if (result is Result.Error) {
+//                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show() // Exibe mensagem de erro
+//            }
         })
     }
 }

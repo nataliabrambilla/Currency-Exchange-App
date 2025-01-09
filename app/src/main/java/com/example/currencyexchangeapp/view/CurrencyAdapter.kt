@@ -1,20 +1,19 @@
-package com.example.currencyexchangeapp.adapter
+package com.example.currencyexchangeapp.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyexchangeapp.databinding.ItemListBinding
-import com.example.currencyexchangeapp.service.model.Currency
+import com.example.currencyexchangeapp.model.model.CurrencyItemModel
 
-class CurrencyAdapter(private var currencyList: List<Currency>/*, private val countryFlags: Map<String, String>*/) :
-    RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
+class CurrencyAdapter(
+    private var currencies: List<CurrencyItemModel>
+) : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
     inner class CurrencyViewHolder(private val binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root) {
 
         //Vincular os dados de um item da lista ao layout correspondente
-        fun bind(currency: Currency) {
-
-        //Atribuir o valor das propriedades do objeto Currency aos TextViews
+        fun bind(currency: CurrencyItemModel) {
             binding.textNameCurrency.text = currency.name
             binding.textCodeCurrency.text = currency.code
 //
@@ -28,30 +27,24 @@ class CurrencyAdapter(private var currencyList: List<Currency>/*, private val co
 
     //Criar a visualização de uma nova view para um item
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
-
-        //Criar um objeto do tipo LayoutInflater
-        val inflater = LayoutInflater.from(parent.context)
-        //Converter o item_list em um objeto o tipo view (???)
-        val itemView = ItemListBinding.inflate(inflater, parent, false)
-
+        val inflater = LayoutInflater.from(parent.context) //Criar um objeto do tipo LayoutInflater
+        val itemView = ItemListBinding.inflate(inflater, parent, false) //Converter o item_list em um objeto o tipo view (???)
         return CurrencyViewHolder(itemView)
     }
 
     //Fazer a vinculação dos dados de um item da lista, ao viewHolder correspondente
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
-
-        //Passar o item atual da lista (currencyList[position]) para o viewHolder
-        holder.bind(currencyList[position])
+        holder.bind(currencies[position]) //Passar o item atual da lista (currencyList[position]) para o viewHolder
     }
 
     //Recuperar a quantidade de itens do RecyclerView
     override fun getItemCount(): Int {
-        return currencyList.size
+        return currencies.size
     }
 
-    // Método para atualizar a lista
-    fun submitList(newList: List<Currency>) {
-        currencyList = newList
+    // Atualizar a lista
+    fun submitList(newList: List<CurrencyItemModel>) {
+        currencies = newList
         notifyDataSetChanged()
     }
 }

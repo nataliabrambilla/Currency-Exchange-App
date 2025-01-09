@@ -1,4 +1,4 @@
-package com.example.currencyexchangeapp.service.repository.remote
+package com.example.currencyexchangeapp.model.repository
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,6 +17,7 @@ class RetrofitHelper {
             .baseUrl("https://restcountries.com/") //VERIFICAR URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+            .create(FlagService::class.java)
 
         /*private lateinit var INSTANCE: Retrofit
 
