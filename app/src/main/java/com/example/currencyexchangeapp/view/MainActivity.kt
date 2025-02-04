@@ -13,7 +13,7 @@ import com.example.currencyexchangeapp.viewmodel.CurrencyViewModel
 class MainActivity : AppCompatActivity() {
 
     var currencyRepository = CurrencyRepository()
-    private lateinit var currencyViewModel: CurrencyViewModel
+    private var currencyViewModel: CurrencyViewModel = CurrencyViewModel()
 
     //Criar do binding e inflar o layout
     private val binding by lazy {

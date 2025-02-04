@@ -1,16 +1,14 @@
 package com.example.currencyexchangeapp.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyexchangeapp.model.model.CurrencyListModel
 import com.example.currencyexchangeapp.model.repository.CurrencyRepository
-import com.example.currencyexchangeapp.model.response.CurrencyConversionResponse
 import kotlinx.coroutines.launch
 
-class CurrencyViewModel(application: Application) : AndroidViewModel(application) {
+class CurrencyViewModel : ViewModel() {
 
     private var currencyFrom: String? = null
     private var currencyTo: String? = null
