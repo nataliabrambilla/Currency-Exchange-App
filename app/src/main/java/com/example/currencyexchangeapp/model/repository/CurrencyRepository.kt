@@ -1,24 +1,37 @@
 package com.example.currencyexchangeapp.model.repository
 
-import com.example.currencyexchangeapp.model.model.CurrencyConversionResponse
+import com.example.currencyexchangeapp.model.model.CurrencyConversionModel
 import com.example.currencyexchangeapp.model.response.CurrencyListResponse
-import com.example.currencyexchangeapp.model.model.CurrenciesModel
-import com.example.currencyexchangeapp.model.model.CurrencyItemModel
-import com.example.currencyexchangeapp.model.response.FlagResponse
+import com.example.currencyexchangeapp.model.model.CurrencyListModel
+import com.example.currencyexchangeapp.model.model.CurrencyListItemModel
+import com.example.currencyexchangeapp.model.response.CurrencyConversionResponse
 
 class CurrencyRepository {
 
-    private val getgeoApi = RetrofitHelper.retrofitGetgeoapi
-    private val restcountriesApi = RetrofitHelper.retrofitRestcountries
+    private val remote = RetrofitHelper.currencyAPI
+    //private val restcountriesApi = RetrofitHelper.retrofitRestcountries
 
     private suspend fun getCurrencyList(): CurrencyListResponse {
-        val response = getgeoApi.getCurrencyList()
+        val response = remote.getCurrencyList()
         val body = response.body()
         return if (response.isSuccessful && body != null) {
             body
         } else {
             throw Exception()
         }
+    }
+
+    suspend fun getCurrenciesModel(): CurrencyListModel {
+        val currencyListResult = getCurrencyList()
+        val currenciesItemList = mutableListOf<CurrencyListItemModel>()
+
+        for (entry in currencyListResult.currencies) {
+            val newListCurrency = CurrencyListItemModel(listItemCode = entry.key, listItemName = entry.value)
+
+            currenciesItemList.add(newListCurrency)
+        }
+
+        return CurrencyListModel(listItem = currenciesItemList.toList())
     }
 
     suspend fun getCurrencyConversion(
@@ -26,7 +39,7 @@ class CurrencyRepository {
         to: String,
         amount: Int,
     ): CurrencyConversionResponse {
-        val response = getgeoApi.getCurrencyConversion(from = from, to = to, amount = amount)
+        val response = remote.getCurrencyConversion(from = from, to = to, amount = amount)
         val body = response.body()
         return if (response.isSuccessful && body != null) {
             body
@@ -35,25 +48,21 @@ class CurrencyRepository {
         }
     }
 
-    private fun getFlags(): List<FlagResponse> {
-        throw Exception("ainda nao implementado")
-    }
+    suspend fun getCurrencyConversionModel(
+        from: String,
+        to: String,
+        amount: Int
+    ): CurrencyConversionModel {
 
-    suspend fun getCurrenciesModel(): CurrenciesModel {
-        val currencyListResult = getCurrencyList()
+        val currencyConversionResult = getCurrencyConversion(from = from, to = to, amount = amount)
+        val ratesListValues = currencyConversionResult.rates.values.toList()
 
-        val currenciesItemList = mutableListOf<CurrencyItemModel>()
+        val conversionItemName = ratesListValues[0].currency_name
+        val conversionFinalValue = ratesListValues[0].rate_for_amount
 
-        for (entry in currencyListResult.currencies) {
-            val newListCurrency = CurrencyItemModel(
-                code = entry.key,
-                name = entry.value
-            )
-            currenciesItemList.add(newListCurrency)
-        }
-
-        return CurrenciesModel(
-            items = currenciesItemList.toList()
+        return CurrencyConversionModel(
+            conversionItemName = conversionItemName,
+            conversionFinalValue = conversionFinalValue
         )
     }
 }

@@ -1,6 +1,6 @@
 package com.example.currencyexchangeapp.model.repository
 
-import com.example.currencyexchangeapp.model.model.CurrencyConversionResponse
+import com.example.currencyexchangeapp.model.response.CurrencyConversionResponse
 import com.example.currencyexchangeapp.model.response.CurrencyListResponse
 import com.example.currencyexchangeapp.util.Constants.API_KEY
 import com.example.currencyexchangeapp.util.Constants.FORMAT

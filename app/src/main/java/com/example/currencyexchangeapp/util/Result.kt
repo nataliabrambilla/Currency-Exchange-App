@@ -1,4 +1,4 @@
-package com.example.currencyexchangeapp
+package com.example.currencyexchangeapp.util
 
 sealed class Result<T> {
     data class Error<T>(val message: String) : Result<T>()

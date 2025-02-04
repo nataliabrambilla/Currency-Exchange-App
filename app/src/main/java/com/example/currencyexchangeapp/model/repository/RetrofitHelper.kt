@@ -7,17 +7,17 @@ class RetrofitHelper {
 
     companion object {
 
-        val retrofitGetgeoapi = Retrofit.Builder()
+        val currencyAPI = Retrofit.Builder()
             .baseUrl("https://api.getgeoapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CurrencyService::class.java)
 
-        val retrofitRestcountries = Retrofit.Builder()
+        /*val retrofitRestcountries = Retrofit.Builder()
             .baseUrl("https://restcountries.com/") //VERIFICAR URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(FlagService::class.java)
+            .create(FlagService::class.java)*/
 
         /*private lateinit var INSTANCE: Retrofit
 

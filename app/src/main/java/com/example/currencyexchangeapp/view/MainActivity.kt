@@ -1,33 +1,67 @@
 package com.example.currencyexchangeapp.view
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.currencyexchangeapp.databinding.ActivityMainBinding
+import com.example.currencyexchangeapp.model.repository.CurrencyRepository
+import com.example.currencyexchangeapp.util.Constants
+import com.example.currencyexchangeapp.viewmodel.CurrencyViewModel
 
 class MainActivity : AppCompatActivity() {
+
+    var currencyRepository = CurrencyRepository()
+    private lateinit var currencyViewModel: CurrencyViewModel
 
     //Criar do binding e inflar o layout
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+//    private val register = registerForActivityResult(
+//        ActivityResultContracts.StartActivityForResult()
+//    ) {result ->
+//        if (result.resultCode == RESULT_OK) {
+//            result.data?.let {
+//
+//            }
+//        }
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        teste()
-
-        //Abrir a CurrencyListActivity
-        openCurrencyListActivity()
         //Configurar botões numéricos
         setupNumericButtons()
+
         //Limpar ao clicar no buttonClear
         setupClearButton()
+
         //Inverter moedas
         binding.btnSwap.setOnClickListener {
             swapCurrencies()
         }
+
+        //Abrir a CurrencyListActivity
+        openCurrencyListActivity1()
+        openCurrencyListActivity2()
+
+        //getCurrencyCode1()
+
+        //currencyViewModel.fetchCurrencyConversion()
+
+        /*lifecycleScope.launch {
+            var result = currencyRepository.getCurrencyConversionModel(
+                from = "USD",
+                to = "BRL",
+                amount = 10,
+            )
+
+            println("natalia: ${result.conversionItemName}, R$ ${result.conversionFinalValue}")
+        }*/
     }
 
     private fun swapCurrencies() {
@@ -49,16 +83,31 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun openCurrencyListActivity() {
-
-        //A partir de clCurrency1
-        binding.clCurrency1.setOnClickListener {
-            startActivity(Intent(this, CurrencyListActivity::class.java))
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (data?.hasExtra(Constants.CURRENCY_CODE) == true) {
+                val currencyCode = data.getStringExtra(Constants.CURRENCY_CODE) ?: return
+                if (requestCode == 100) {
+                    binding.textCurrency1.text = currencyCode
+                    currencyViewModel.onCurrencyFromChanged(currencyCode)
+                } else if (requestCode == 200) {
+                    binding.textCurrency2.text = currencyCode
+                    currencyViewModel.onCurrencyToChanged(currencyCode)
+                }
+            }
         }
+    }
 
-        //A partir de clCurrency2
+    private fun openCurrencyListActivity1() {
+        binding.clCurrency1.setOnClickListener {
+            startActivityForResult(Intent(this, CurrencyListActivity::class.java), 100)
+        }
+    }
+
+    private fun openCurrencyListActivity2() {
         binding.clCurrency2.setOnClickListener {
-            startActivity(Intent(this, CurrencyListActivity::class.java))
+            startActivityForResult(Intent(this, CurrencyListActivity::class.java), 200)
         }
     }
 
@@ -104,4 +153,21 @@ class MainActivity : AppCompatActivity() {
             binding.textValue1.text = "0"
         }
     }
+
+    private fun getCurrencyCode1() {
+
+        val bundle = intent.extras
+        val currency = bundle?.getString(Constants.CURRENCY_CODE)
+        binding.textCurrency1.text = currency
+
+        /*if () {
+            val currencyCode1 = bundle?.getString(Constants.CURRENCY_CODE)
+            binding.textCurrency1.text = currencyCode1
+
+        } else {
+            val currencyCode2 = bundle?.getString(Constants.CURRENCY_CODE)
+            binding.textCurrency2.text = currencyCode2
+        }*/
+    }
+
 }
