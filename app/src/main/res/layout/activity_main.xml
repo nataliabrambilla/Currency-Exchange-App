@@ -24,8 +24,7 @@
             app:layout_constraintBottom_toTopOf="@id/textCurrency1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:src="@drawable/ic_man"/>
+            app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
             android:id="@+id/textCurrency1"
@@ -73,8 +72,7 @@
             app:layout_constraintBottom_toTopOf="@id/textCurrency2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/clCurrency2"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:src="@drawable/ic_woman"/>
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/textCurrency2"

@@ -55,13 +55,13 @@ class CurrencyRepository {
     ): CurrencyConversionModel {
 
         val currencyConversionResult = getCurrencyConversion(from = from, to = to, amount = amount)
-        val ratesListValues = currencyConversionResult.rates.values.toList()
+        val currencyRatesList = currencyConversionResult.rates.values.toList()
 
-        val conversionItemName = ratesListValues[0].currency_name
-        val conversionFinalValue = ratesListValues[0].rate_for_amount
+        val conversionItemCode = currencyConversionResult.rates.keys.toString()
+        val conversionFinalValue = currencyRatesList[0].rate_for_amount
 
         return CurrencyConversionModel(
-            conversionItemName = conversionItemName,
+            conversionItemCode = conversionItemCode,
             conversionFinalValue = conversionFinalValue
         )
     }

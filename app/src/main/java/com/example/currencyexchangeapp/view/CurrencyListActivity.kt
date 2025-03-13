@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyexchangeapp.databinding.ActivityCurrencyListBinding
@@ -40,6 +43,8 @@ class CurrencyListActivity : AppCompatActivity(), CurrencyAdapter.OnCurrencyClic
         //Carregar a lista de moedas
         currencyViewModel.fetchCurrencyList()
 
+        setupSearchFilter()
+
     }
 
     private fun setupRecyclerView() {
@@ -58,9 +63,20 @@ class CurrencyListActivity : AppCompatActivity(), CurrencyAdapter.OnCurrencyClic
     }
 
     override fun onCurrencyClick(currencyCode: String) {
-        val i = Intent()
-        i.putExtra(Constants.CURRENCY_CODE, currencyCode)
-        setResult(Activity.RESULT_OK, i)
+        val intent = Intent()
+        intent.putExtra(Constants.CURRENCY_CODE, currencyCode)
+        intent.putExtra("openCurrencyListCode", this.intent.extras?.getInt("openCurrencyListCode", 0))
+        setResult(Activity.RESULT_OK, intent)
         finish()
+    }
+
+    private fun setupSearchFilter() {
+        binding.textSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                currencyAdapter.filter(s.toString())
+            }
+        })
     }
 }

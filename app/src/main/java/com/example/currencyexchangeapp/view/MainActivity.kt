@@ -5,115 +5,110 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import com.example.currencyexchangeapp.databinding.ActivityMainBinding
-import com.example.currencyexchangeapp.model.repository.CurrencyRepository
 import com.example.currencyexchangeapp.util.Constants
 import com.example.currencyexchangeapp.viewmodel.CurrencyViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    var currencyRepository = CurrencyRepository()
-    private var currencyViewModel: CurrencyViewModel = CurrencyViewModel()
+    private lateinit var currencyViewModel: CurrencyViewModel
 
-    //Criar do binding e inflar o layout
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-
-//    private val register = registerForActivityResult(
-//        ActivityResultContracts.StartActivityForResult()
-//    ) {result ->
-//        if (result.resultCode == RESULT_OK) {
-//            result.data?.let {
-//
-//            }
-//        }
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        //Configurar botões numéricos
+        currencyViewModel = ViewModelProvider(this).get(CurrencyViewModel::class.java)
         setupNumericButtons()
-
-        //Limpar ao clicar no buttonClear
         setupClearButton()
 
-        //Inverter moedas
         binding.btnSwap.setOnClickListener {
             swapCurrencies()
         }
 
-        //Abrir a CurrencyListActivity
-        openCurrencyListActivity1()
-        openCurrencyListActivity2()
+        openCurrencyListActivityFrom()
+        openCurrencyListActivityTo()
+        observeConversionResult()
 
-        //getCurrencyCode1()
-
-        //currencyViewModel.fetchCurrencyConversion()
-
-        /*lifecycleScope.launch {
-            var result = currencyRepository.getCurrencyConversionModel(
-                from = "USD",
-                to = "BRL",
-                amount = 10,
-            )
-
-            println("natalia: ${result.conversionItemName}, R$ ${result.conversionFinalValue}")
-        }*/
     }
 
     private fun swapCurrencies() {
 
-        //Armazenar temporariamente os dados do clCurrency1
         val tempCurrencyName1 = binding.textCurrency1.text.toString()
         val tempCurrencyValue1 = binding.textValue1.text.toString()
         val tempCurrencyFlag1 = binding.imageCurrency1.drawable //drawable?
 
-        //Trocar os dados entre os dois layouts
         binding.textCurrency1.text = binding.textCurrency2.text
         binding.textValue1.text = binding.textValue2.text
         binding.imageCurrency1.setImageDrawable(binding.imageCurrency2.drawable)
 
-        //Usar os valores temporários para completar a inversão
         binding.textCurrency2.text = tempCurrencyName1
         binding.textValue2.text = tempCurrencyValue1
         binding.imageCurrency2.setImageDrawable(tempCurrencyFlag1)
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
+    private var startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = it.data
             if (data?.hasExtra(Constants.CURRENCY_CODE) == true) {
-                val currencyCode = data.getStringExtra(Constants.CURRENCY_CODE) ?: return
-                if (requestCode == 100) {
-                    binding.textCurrency1.text = currencyCode
-                    currencyViewModel.onCurrencyFromChanged(currencyCode)
-                } else if (requestCode == 200) {
-                    binding.textCurrency2.text = currencyCode
-                    currencyViewModel.onCurrencyToChanged(currencyCode)
+                val currencyCode = data.getStringExtra(Constants.CURRENCY_CODE) ?: return@registerForActivityResult
+                val openCurrencyListCode = data.getIntExtra("openCurrencyListCode", 0)
+
+                if(openCurrencyListCode > 0) {
+                    when (openCurrencyListCode) {
+                        10 -> {
+                            binding.textCurrency1.text = currencyCode
+                            currencyViewModel.onCurrencyFromChanged(currencyCode)
+                        }
+                        20 -> {
+                            binding.textCurrency2.text = currencyCode
+                            currencyViewModel.onCurrencyToChanged(currencyCode)
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun openCurrencyListActivity1() {
-        binding.clCurrency1.setOnClickListener {
-            startActivityForResult(Intent(this, CurrencyListActivity::class.java), 100)
+    private fun observeConversionResult() {
+
+        currencyViewModel.conversionValue.observe(this) { conversionValue ->
+            binding.textValue2.text = conversionValue
+        }
+
+        listOf(binding.textCurrency1, binding.textCurrency2, binding.textValue1).forEach { textView ->
+            textView.addTextChangedListener {
+                val currencyFrom = binding.textCurrency1.text.toString()
+                val currencyTo = binding.textCurrency2.text.toString()
+                val amount = binding.textValue1.text.toString().toIntOrNull() ?: 0
+                currencyViewModel.onCurrencyChanged(currencyFrom, currencyTo, amount)
+            }
         }
     }
 
-    private fun openCurrencyListActivity2() {
+    private fun openCurrencyListActivityFrom() {
+        binding.clCurrency1.setOnClickListener {
+            val intent = Intent(this, CurrencyListActivity::class.java)
+            intent.putExtra("openCurrencyListCode", 10)
+            startForResult.launch(intent)
+        }
+    }
+
+    private fun openCurrencyListActivityTo() {
         binding.clCurrency2.setOnClickListener {
-            startActivityForResult(Intent(this, CurrencyListActivity::class.java), 200)
+            val intent = Intent(this, CurrencyListActivity::class.java)
+            intent.putExtra("openCurrencyListCode", 20)
+            startForResult.launch(intent)
         }
     }
 
     private fun setupNumericButtons() {
-
-        //Listener para botões numéricos e "."
         val buttons = listOf(
             binding.button0,
             binding.button1,
@@ -128,14 +123,9 @@ class MainActivity : AppCompatActivity() {
             binding.buttonDot
         )
 
-        //Atualizar textValue1, ao clicar em button
         buttons.forEach { button ->
-
             button.setOnClickListener {
-
-                //Capturar o valor atual do textValue1
                 val currentText = binding.textValue1.text.toString()
-                //Capturar o valor selecionado do botão clicado
                 val buttonText = button.text.toString()
 
                 if (currentText == "0" && buttonText != ".") {
@@ -151,23 +141,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupClearButton() {
         binding.buttonClear.setOnClickListener {
             binding.textValue1.text = "0"
+            binding.textValue2.text = "0"
         }
     }
-
-    private fun getCurrencyCode1() {
-
-        val bundle = intent.extras
-        val currency = bundle?.getString(Constants.CURRENCY_CODE)
-        binding.textCurrency1.text = currency
-
-        /*if () {
-            val currencyCode1 = bundle?.getString(Constants.CURRENCY_CODE)
-            binding.textCurrency1.text = currencyCode1
-
-        } else {
-            val currencyCode2 = bundle?.getString(Constants.CURRENCY_CODE)
-            binding.textCurrency2.text = currencyCode2
-        }*/
-    }
-
 }

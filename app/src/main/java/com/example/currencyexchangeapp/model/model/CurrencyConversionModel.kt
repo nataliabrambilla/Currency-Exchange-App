@@ -1,6 +1,6 @@
 package com.example.currencyexchangeapp.model.model
 
 data class CurrencyConversionModel(
-    val conversionItemName: String,
+    val conversionItemCode: String,
     val conversionFinalValue: String
 )

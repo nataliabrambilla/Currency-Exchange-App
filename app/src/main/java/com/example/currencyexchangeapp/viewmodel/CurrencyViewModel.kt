@@ -13,10 +13,13 @@ class CurrencyViewModel : ViewModel() {
     private var currencyFrom: String? = null
     private var currencyTo: String? = null
 
-    private val currencyRepository = CurrencyRepository() //Cria a instancia do CurrencyRepository, para interagir com o banco de dados.
+    private val currencyRepository = CurrencyRepository()
 
-    private val _currencyList = MutableLiveData<CurrencyListModel>() //MutableLiveData -> Classe de dados observável e mutável apenas dentro do ViewModel. <CurrenciesModel> -> Tipo de dados que será armazenado dentro do MutableLiveData.
-    val currencyList: LiveData<CurrencyListModel> = _currencyList //LiveData -> Classe de dados de somente leitura. A currencyList expõe o LiveData para o resto do aplicativo.
+    private val _currencyList = MutableLiveData<CurrencyListModel>()
+    val currencyList: LiveData<CurrencyListModel> = _currencyList
+
+    private val _conversionValue = MutableLiveData<String>()
+    val conversionValue: LiveData<String> = _conversionValue
 
     fun onCurrencyFromChanged(value: String) {
         currencyFrom = value
@@ -24,6 +27,12 @@ class CurrencyViewModel : ViewModel() {
 
     fun onCurrencyToChanged(value: String) {
         currencyTo = value
+    }
+
+    fun onCurrencyChanged(from: String, to: String, amount: Int) {
+        if (from.isNotEmpty() && to.isNotEmpty() && amount > 0) {
+            fetchCurrencyConversion(from, to, amount)
+        }
     }
 
     fun fetchCurrencyList() {
@@ -39,15 +48,11 @@ class CurrencyViewModel : ViewModel() {
         }
     }
 
-    fun fetchCurrencyConversion() {
-        if (currencyTo == null && currencyFrom == null) return
+    private fun fetchCurrencyConversion(from: String, to: String, amount: Int){
         viewModelScope.launch {
             try {
-                var resultCurrencyConversion = currencyRepository.getCurrencyConversionModel(
-                    from = currencyFrom.orEmpty(),
-                    to = currencyTo.orEmpty(),
-                    amount = 1,
-                ) //Trocar para pegar da tela
+                val result = currencyRepository.getCurrencyConversionModel(from, to, amount)
+                _conversionValue.postValue(result.conversionFinalValue)
 
             } catch (e: Exception) {
                 println("NATALIA -> Erro currencyRepository.getCurrencyConversion() ")

@@ -8,15 +8,15 @@ import com.example.currencyexchangeapp.model.model.CurrencyListItemModel
 
 class CurrencyAdapter(private var currencies: List<CurrencyListItemModel>, private val listener: OnCurrencyClickListener) : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
-    inner class CurrencyViewHolder(private val binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root) {
+    private var originalList: List<CurrencyListItemModel> = currencies.toList()
 
-        //Vincular os dados de um item da lista ao layout correspondente
+    inner class CurrencyViewHolder(private val binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindCurrencyList(currencyListItem: CurrencyListItemModel) {
             binding.textNameCurrency.text = currencyListItem.listItemName
             binding.textCodeCurrency.text = currencyListItem.listItemCode
 
             binding.currencySelection.setOnClickListener {
-                listener.onCurrencyClick(currencyListItem.listItemCode) // Chama o listener aqui
+                listener.onCurrencyClick(currencyListItem.listItemCode)
             }
         }
     }
@@ -40,11 +40,23 @@ class CurrencyAdapter(private var currencies: List<CurrencyListItemModel>, priva
 
     // Atualizar a lista
     fun updateCurrencyList(newList: List<CurrencyListItemModel>) {
-        currencies = newList
-        notifyDataSetChanged()
+        originalList = newList.toList()  // Salva uma cópia da lista original
+        currencies = newList  // Atualiza a lista exibida no RecyclerView
+        notifyDataSetChanged()  // Notifica o adapter para recarregar a lista
     }
 
     interface OnCurrencyClickListener {
         fun onCurrencyClick(currencyCode: String)
+    }
+
+    fun filter(text: String) {
+        currencies = if (text.isEmpty()) {
+            originalList
+        } else {
+            originalList.filter {
+                it.listItemName.startsWith(text, ignoreCase = true) || it.listItemCode.startsWith(text, ignoreCase = true)
+            }
+        }
+        notifyDataSetChanged()
     }
 }
