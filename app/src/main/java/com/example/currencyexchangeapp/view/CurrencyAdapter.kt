@@ -21,28 +21,24 @@ class CurrencyAdapter(private var currencies: List<CurrencyListItemModel>, priva
         }
     }
 
-    //Criar a visualização de uma nova view para um item
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
-        val inflater = LayoutInflater.from(parent.context) //Criar um objeto do tipo LayoutInflater
-        val itemView = ItemListBinding.inflate(inflater, parent, false) // Inflando o layout item_list
+        val inflater = LayoutInflater.from(parent.context)
+        val itemView = ItemListBinding.inflate(inflater, parent, false)
         return CurrencyViewHolder(itemView)
     }
 
-    //Fazer a vinculação dos dados de um item da lista, ao viewHolder correspondente
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
-        holder.bindCurrencyList(currencies[position]) //Passar o item atual da lista (currencyList[position]) para o viewHolder
+        holder.bindCurrencyList(currencies[position])
     }
 
-    //Recuperar a quantidade de itens do RecyclerView
     override fun getItemCount(): Int {
         return currencies.size
     }
 
-    // Atualizar a lista
     fun updateCurrencyList(newList: List<CurrencyListItemModel>) {
-        originalList = newList.toList()  // Salva uma cópia da lista original
-        currencies = newList  // Atualiza a lista exibida no RecyclerView
-        notifyDataSetChanged()  // Notifica o adapter para recarregar a lista
+        originalList = newList.toList()
+        currencies = newList
+        notifyDataSetChanged()
     }
 
     interface OnCurrencyClickListener {

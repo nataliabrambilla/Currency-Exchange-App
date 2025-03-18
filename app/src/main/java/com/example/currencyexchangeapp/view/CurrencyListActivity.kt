@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyexchangeapp.databinding.ActivityCurrencyListBinding
@@ -25,30 +24,18 @@ class CurrencyListActivity : AppCompatActivity(), CurrencyAdapter.OnCurrencyClic
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        // Instanciando o ViewModel, através do ViewModelProvider
-        currencyViewModel = ViewModelProvider(this).get(CurrencyViewModel::class.java)
-
-        // Configurar a RecyclerView
+        currencyViewModel = ViewModelProvider(this)[CurrencyViewModel::class.java]
         setupRecyclerView()
-
-        // Observar as atualizações do LiveData para a lista de moedas
+        setupSearchFilter()
         observeCurrencyList()
-
-        //Voltar para a MainActivity
+        currencyViewModel.fetchCurrencyList()
         binding.btnBack.setOnClickListener {
             finish()
         }
-
-        //Carregar a lista de moedas
-        currencyViewModel.fetchCurrencyList()
-
-        setupSearchFilter()
-
     }
 
     private fun setupRecyclerView() {
-        currencyAdapter = CurrencyAdapter(emptyList(), this) // Inicializar o adapter com uma lista vazia inicialmente
+        currencyAdapter = CurrencyAdapter(emptyList(), this)
         binding.rvList.layoutManager = LinearLayoutManager(this)
         binding.rvList.adapter = currencyAdapter
     }
@@ -65,7 +52,7 @@ class CurrencyListActivity : AppCompatActivity(), CurrencyAdapter.OnCurrencyClic
     override fun onCurrencyClick(currencyCode: String) {
         val intent = Intent()
         intent.putExtra(Constants.CURRENCY_CODE, currencyCode)
-        intent.putExtra("openCurrencyListCode", this.intent.extras?.getInt("openCurrencyListCode", 0))
+        intent.putExtra(Constants.OPEN_CURRENCY_LIST_CODE, this.intent.extras?.getInt(Constants.OPEN_CURRENCY_LIST_CODE, 0))
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

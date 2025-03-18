@@ -9,7 +9,6 @@ import com.example.currencyexchangeapp.model.response.CurrencyConversionResponse
 class CurrencyRepository {
 
     private val remote = RetrofitHelper.currencyAPI
-    //private val restcountriesApi = RetrofitHelper.retrofitRestcountries
 
     private suspend fun getCurrencyList(): CurrencyListResponse {
         val response = remote.getCurrencyList()
@@ -21,20 +20,17 @@ class CurrencyRepository {
         }
     }
 
-    suspend fun getCurrenciesModel(): CurrencyListModel {
+    suspend fun getCurrencyListModel(): CurrencyListModel {
         val currencyListResult = getCurrencyList()
         val currenciesItemList = mutableListOf<CurrencyListItemModel>()
-
         for (entry in currencyListResult.currencies) {
             val newListCurrency = CurrencyListItemModel(listItemCode = entry.key, listItemName = entry.value)
-
             currenciesItemList.add(newListCurrency)
         }
-
         return CurrencyListModel(listItem = currenciesItemList.toList())
     }
 
-    suspend fun getCurrencyConversion(
+    private suspend fun getCurrencyConversion(
         from: String,
         to: String,
         amount: Int,
@@ -53,13 +49,10 @@ class CurrencyRepository {
         to: String,
         amount: Int
     ): CurrencyConversionModel {
-
         val currencyConversionResult = getCurrencyConversion(from = from, to = to, amount = amount)
         val currencyRatesList = currencyConversionResult.rates.values.toList()
-
         val conversionItemCode = currencyConversionResult.rates.keys.toString()
         val conversionFinalValue = currencyRatesList[0].rate_for_amount
-
         return CurrencyConversionModel(
             conversionItemCode = conversionItemCode,
             conversionFinalValue = conversionFinalValue

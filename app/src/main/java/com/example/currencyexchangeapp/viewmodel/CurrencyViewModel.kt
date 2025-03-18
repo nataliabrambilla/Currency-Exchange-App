@@ -38,7 +38,7 @@ class CurrencyViewModel : ViewModel() {
     fun fetchCurrencyList() {
         viewModelScope.launch {
             try {
-                val resultCurrencyList = currencyRepository.getCurrenciesModel() //Chama o repositório para buscar o CurrencyListViewModel
+                val resultCurrencyList = currencyRepository.getCurrencyListModel() //Chama o repositório para buscar o CurrencyListViewModel
                 _currencyList.postValue(resultCurrencyList)
 
             } catch (e: Exception) {

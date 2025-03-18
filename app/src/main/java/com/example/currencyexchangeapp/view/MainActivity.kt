@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.currencyexchangeapp.databinding.ActivityMainBinding
 import com.example.currencyexchangeapp.util.Constants
 import com.example.currencyexchangeapp.viewmodel.CurrencyViewModel
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,34 +23,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        currencyViewModel = ViewModelProvider(this).get(CurrencyViewModel::class.java)
+        currencyViewModel = ViewModelProvider(this)[CurrencyViewModel::class.java]
         setupNumericButtons()
         setupClearButton()
-
         binding.btnSwap.setOnClickListener {
             swapCurrencies()
         }
-
         openCurrencyListActivityFrom()
         openCurrencyListActivityTo()
         observeConversionResult()
-
-    }
-
-    private fun swapCurrencies() {
-
-        val tempCurrencyName1 = binding.textCurrency1.text.toString()
-        val tempCurrencyValue1 = binding.textValue1.text.toString()
-        val tempCurrencyFlag1 = binding.imageCurrency1.drawable //drawable?
-
-        binding.textCurrency1.text = binding.textCurrency2.text
-        binding.textValue1.text = binding.textValue2.text
-        binding.imageCurrency1.setImageDrawable(binding.imageCurrency2.drawable)
-
-        binding.textCurrency2.text = tempCurrencyName1
-        binding.textValue2.text = tempCurrencyValue1
-        binding.imageCurrency2.setImageDrawable(tempCurrencyFlag1)
 
     }
 
@@ -58,15 +40,14 @@ class MainActivity : AppCompatActivity() {
             val data: Intent? = it.data
             if (data?.hasExtra(Constants.CURRENCY_CODE) == true) {
                 val currencyCode = data.getStringExtra(Constants.CURRENCY_CODE) ?: return@registerForActivityResult
-                val openCurrencyListCode = data.getIntExtra("openCurrencyListCode", 0)
-
+                val openCurrencyListCode = data.getIntExtra(Constants.OPEN_CURRENCY_LIST_CODE, 0)
                 if(openCurrencyListCode > 0) {
                     when (openCurrencyListCode) {
-                        10 -> {
+                        Constants.CURRENCY_LIST_ACTIVITY_FROM_CODE -> {
                             binding.textCurrency1.text = currencyCode
                             currencyViewModel.onCurrencyFromChanged(currencyCode)
                         }
-                        20 -> {
+                        Constants.CURRENCY_LIST_ACTIVITY_TO_CODE -> {
                             binding.textCurrency2.text = currencyCode
                             currencyViewModel.onCurrencyToChanged(currencyCode)
                         }
@@ -76,12 +57,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeConversionResult() {
-
-        currencyViewModel.conversionValue.observe(this) { conversionValue ->
-            binding.textValue2.text = conversionValue
+    private fun openCurrencyListActivityFrom() {
+        binding.clCurrency1.setOnClickListener {
+            val intent = Intent(this, CurrencyListActivity::class.java)
+            intent.putExtra(Constants.OPEN_CURRENCY_LIST_CODE, Constants.CURRENCY_LIST_ACTIVITY_FROM_CODE)
+            startForResult.launch(intent)
         }
+    }
 
+    private fun openCurrencyListActivityTo() {
+        binding.clCurrency2.setOnClickListener {
+            val intent = Intent(this, CurrencyListActivity::class.java)
+            intent.putExtra(Constants.OPEN_CURRENCY_LIST_CODE, Constants.CURRENCY_LIST_ACTIVITY_TO_CODE)
+            startForResult.launch(intent)
+        }
+    }
+
+    private fun observeConversionResult() {
+        currencyViewModel.conversionValue.observe(this) { conversionValue ->
+            binding.textValue2.text = String.format(Locale.getDefault(),"%.2f", conversionValue.toDoubleOrNull() ?: 0.0)
+        }
         listOf(binding.textCurrency1, binding.textCurrency2, binding.textValue1).forEach { textView ->
             textView.addTextChangedListener {
                 val currencyFrom = binding.textCurrency1.text.toString()
@@ -92,20 +87,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun openCurrencyListActivityFrom() {
-        binding.clCurrency1.setOnClickListener {
-            val intent = Intent(this, CurrencyListActivity::class.java)
-            intent.putExtra("openCurrencyListCode", 10)
-            startForResult.launch(intent)
-        }
-    }
+    private fun swapCurrencies() {
+        val tempCurrencyName1 = binding.textCurrency1.text.toString()
+        val tempCurrencyValue1 = binding.textValue1.text.toString()
+        val tempCurrencyFlag1 = binding.imageCurrency1.drawable //drawable?
+        binding.textCurrency1.text = binding.textCurrency2.text
+        binding.textValue1.text = binding.textValue2.text
+        binding.imageCurrency1.setImageDrawable(binding.imageCurrency2.drawable)
+        binding.textCurrency2.text = tempCurrencyName1
+        binding.textValue2.text = tempCurrencyValue1
+        binding.imageCurrency2.setImageDrawable(tempCurrencyFlag1)
 
-    private fun openCurrencyListActivityTo() {
-        binding.clCurrency2.setOnClickListener {
-            val intent = Intent(this, CurrencyListActivity::class.java)
-            intent.putExtra("openCurrencyListCode", 20)
-            startForResult.launch(intent)
-        }
     }
 
     private fun setupNumericButtons() {
@@ -122,13 +114,12 @@ class MainActivity : AppCompatActivity() {
             binding.button9,
             binding.buttonDot
         )
-
         buttons.forEach { button ->
             button.setOnClickListener {
                 val currentText = binding.textValue1.text.toString()
                 val buttonText = button.text.toString()
 
-                if (currentText == "0" && buttonText != ".") {
+                if (currentText == Constants.ZERO && buttonText != Constants.DOT) {
                     binding.textValue1.text = buttonText
                 } else {
                     val newText = currentText + buttonText
@@ -140,8 +131,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClearButton() {
         binding.buttonClear.setOnClickListener {
-            binding.textValue1.text = "0"
-            binding.textValue2.text = "0"
+            binding.textValue1.text = Constants.ZERO
+            binding.textValue2.text = Constants.ZERO
         }
     }
 }
